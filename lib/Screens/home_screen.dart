@@ -70,10 +70,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
         body: Center(
           child: Column(children: [
             Padding(
@@ -81,13 +79,23 @@ class _MyHomePageState extends State<MyHomePage> {
               child: TextField(
                 controller: _textController,
                 decoration: InputDecoration(
-                    hintText: 'Entrez votre nom',
+                    hintText: 'Ecrivez un nom',
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(100.0)),
+                      borderRadius: BorderRadius.circular(100.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(100.0),
+                    ),
                     suffixIcon: IconButton(
-                      icon: const Icon(Icons.clear),
+                      icon: const Icon(
+                        Icons.clear,
+                        color: Colors.black,
+                      ),
                       onPressed: () {
                         _textController.clear();
+                        setState(() {
+                          _user = null;
+                        });
                       },
                     )),
                 onChanged: (value) => setState(() {
@@ -100,8 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
             FutureBuilder(
               future: _user,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  print(snapshot.data);
+                if (snapshot.hasData && _user != null) {
                   return Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
@@ -189,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   return Text("${snapshot.error}");
                 } else if (_user != null && !_isFailed) {
                   return const SpinKitWave(
-                      color: Colors.blue, type: SpinKitWaveType.start);
+                      color: Colors.white, type: SpinKitWaveType.start);
                 } else {
                   return const Text('Aucun utilisateur avec ce nom existe');
                 }
